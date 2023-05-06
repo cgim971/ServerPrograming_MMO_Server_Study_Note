@@ -1,3 +1,5 @@
+Session.cs
+
 ```cs
 using System;
 using System.Collections.Generic;
@@ -59,6 +61,7 @@ namespace ServerCore {
         public abstract void OnSend(int numOfBytes);
         public abstract void OnDisconnected(EndPoint endPoint);
 
+        // _sendQueue, _pendingList 비우기
         void Clear() {
             lock (_lock) {
                 _sendQueue.Clear();
@@ -67,14 +70,17 @@ namespace ServerCore {
         }
 
         public void Start(Socket socket) {
+            // socket할당
             _socket = socket;
 
+            // 이벤트 핸들러 추가
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
             RegisterRecv();
         }
 
+        // 데이터 보내기
         public void Send(List<ArraySegment<byte>> sendBuffList) {
             if (sendBuffList.Count == 0)
                 return;
@@ -88,6 +94,7 @@ namespace ServerCore {
             }
         }
 
+        // 데이터 보내기 
         public void Send(ArraySegment<byte> sendBuff) {
             lock (_lock) {
                 _sendQueue.Enqueue(sendBuff);
@@ -96,6 +103,7 @@ namespace ServerCore {
             }
         }
 
+        // 연결 끊기
         public void Disconnect() {
             if (Interlocked.Exchange(ref _disconnected, 1) == 1)
                 return;
@@ -107,18 +115,23 @@ namespace ServerCore {
         }
 
         #region 네트워크 통신
+        // 데이터 보내기
         void RegisterSend() {
+            // 연결이 끊겼는지
             if (_disconnected == 1)
                 return;
 
+            // 보낼 데이터가 잇는지
             while (_sendQueue.Count > 0) {
                 ArraySegment<byte> buff = _sendQueue.Dequeue();
                 _pendingList.Add(buff);
             }
             _sendArgs.BufferList = _pendingList;
-
+            
             try {
+                // 비동기로 실행하여 pending은 보내졌는지 
                 bool pending = _socket.SendAsync(_sendArgs);
+                // false면 데이터가 보내짐
                 if (pending == false)
                     OnSendCompleted(null, _sendArgs);
             }
@@ -127,15 +140,20 @@ namespace ServerCore {
             }
         }
 
+        // 전송이 완료됫을 때 실행되는 함수
         void OnSendCompleted(object sender, SocketAsyncEventArgs args) {
             lock (_lock) {
+                // args.BytesTransferred는 데이터의 크기를 바이트 단위로 가져온다
+                // args.SocektError 소켓 오류 여부 확인
                 if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success) {
                     try {
+                        // _pendingList 초기화
                         _sendArgs.BufferList = null;
                         _pendingList.Clear();
 
                         OnSend(_sendArgs.BytesTransferred);
 
+                        // 보낼 데이터가 있다면 RegisterSend 실행
                         if (_sendQueue.Count > 0)
                             RegisterSend();
                     }
@@ -144,21 +162,27 @@ namespace ServerCore {
                     }
                 }
                 else {
+                    // 문제 생기면 연결 끊기
                     Disconnect();
                 }
             }
         }
 
+        // 데이터를 받기 위한 함수
         void RegisterRecv() {
+            // 연결이 끊겨잇으면 리턴
             if (_disconnected == 1)
                 return;
 
             _recvBuffer.Clean();
+            // 쓰기 가능한 바이트 영역을 가져옴
             ArraySegment<byte> segment = _recvBuffer.WriteSegment;
             _recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
 
             try {
+                // 데이터를 받음
                 bool pending = _socket.ReceiveAsync(_recvArgs);
+                // 받았으면
                 if (pending == false)
                     OnRecvCompleted(null, _recvArgs);
             }
@@ -167,6 +191,7 @@ namespace ServerCore {
             }
         }
 
+        // 성공적으로 받으면
         void OnRecvCompleted(object sender, SocketAsyncEventArgs args) {
             if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success) {
                 try {

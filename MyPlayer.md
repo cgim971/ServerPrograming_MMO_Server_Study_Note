@@ -27,7 +27,7 @@ public class MyPlayer : Player {
             movePacket.posY = 1;
             movePacket.posZ = UnityEngine.Random.Range(-50, 50);
 
-            //
+            // 데이터 보내기
             _networkManager.Send(movePacket.Write());
         }
     }

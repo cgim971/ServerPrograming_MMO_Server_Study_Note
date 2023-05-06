@@ -1,3 +1,5 @@
+NetworkManager.cs
+
 ```cs
 using DummyClient;
 using ServerCore;
@@ -21,6 +23,7 @@ public class NetworkManager : MonoBehaviour {
         connector.Connect(endPoint, () => _session, 1);
     }
 
+    // 만약 실행할 것이 있다면 
     void Update() {
         List<IPacket> list = PacketQueue.Instance.PopAll();
         foreach (IPacket packet in list) {
@@ -28,6 +31,7 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
+    // 데이터 보내기
     public void Send(ArraySegment<byte> sendBuff) => _session.Send(sendBuff);
 }
 ```

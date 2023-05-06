@@ -75,13 +75,13 @@ public class S_BroadcastEnterGame : IPacket {
         // 
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
 
+        // 반환한다.
         return SendBufferHelper.Close(count);
     }
 }
 
+// 밑의 코드도 위와 같은 행동 반복
 public class C_LeaveGame : IPacket {
-
-
     public ushort Protocol { get { return (ushort)PacketID.C_LeaveGame; } }
 
     public void Read(ArraySegment<byte> segment) {
