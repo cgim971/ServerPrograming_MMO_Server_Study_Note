@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PDL>
+  <packet name="S_BroadcastEnterGame">
+    <int name="playerId"/>
+    <float name="posX"/>
+    <float name="posY"/>
+    <float name="posZ"/>
+    <int name="healthAmount"/>
+    <int name="Life"/>
+  </packet>
+  <packet name="C_LeaveGame">
+  </packet>
+  <packet name="S_BroadcastLeaveGame">
+    <int name="playerId"/>
+  </packet>
+  <packet name="S_PlayerList">
+    <list name="player">
+      <bool name="isSelf"/>
+      <int name="playerId"/>
+      <float name="posX"/>
+      <float name="posY"/>
+      <float name="posZ"/>
+      <int name="healthAmount"/>
+      <int name="Life"/>
+    </list>
+  </packet>
+  <packet name="C_Move">
+    <float name="posX"/>
+    <float name="posY"/>
+    <float name="posZ"/>
+    <float name="dirX"/>
+    <float name="dirZ"/>
+  </packet>
+  <packet name="S_BroadcastMove">
+    <int name="playerId"/>
+    <float name="posX"/>
+    <float name="posY"/>
+    <float name="posZ"/>
+    <float name="dirX"/>
+    <float name="dirZ"/>
+  </packet>
+  <packet name="C_Rot">
+    <float name="angle"/>
+  </packet>
+  <packet name="S_BroadcastRot">
+    <int name="playerId"/>
+    <float name="angle"/>
+  </packet>
+  <packet name="C_Fire">
+  </packet>
+  <packet name="S_BroadcastFire">
+    <int name="playerId"/>
+  </packet>
+  <packet name="C_Hit">
+    <int name="hittedPlayerId"/>
+    <int name="hitAmount"/>
+  </packet>
+  <packet name="S_BroadcastHit">
+    <int name="hittedPlayerId"/>
+    <int name="playerHealth"/>
+  </packet>
+  <packet name="S_BroadcastDie">
+    <int name="playerId"/>
+    <int name="Life"/>
+  </packet>
+  <packet name="C_Revive">
+  </packet>
+  <packet name="S_BroadcastRevive">
+    <int name="playerId"/>
+    <int name="healthAmount"/>
+  </packet>
+</PDL>
