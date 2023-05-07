@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager {
+    public MyPlayer MyPlayer => _myPlayer;
     private MyPlayer _myPlayer;
     // 플레이어들 목록
     Dictionary<int, Player> _players = new Dictionary<int, Player>();

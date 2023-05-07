@@ -21,8 +21,10 @@ public class Bullet : MonoBehaviour {
         if (_isPlayer) {
             Player player = collision.transform.GetComponent<Player>();
             if (player != null) {
+                if (player.PlayerId != PlayerManager.Instance.MyPlayer.PlayerId)
+                    return;
+
                 C_Hit hitPacket = new C_Hit();
-                Debug.Log(player.PlayerId);
                 hitPacket.hittedPlayerId = player.PlayerId;
                 hitPacket.hitAmount = 10;
                 NetworkManager.Instance.Send(hitPacket.Write());
