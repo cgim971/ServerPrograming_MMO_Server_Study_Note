@@ -1,4 +1,9 @@
-NetworkManager.cs
+유니티에서 작업을 할 때 주의사항
+
+- Span과 BitConverter.TryWriteBytes를 사용할 수가 없다.
+- Unity의 Main 쓰레드 외 백그라운드 쓰레드에서 유니티 객체에 접근하려고 하면 Crashing이 발생한다. ⇒ 게임 로직은 Main 쓰레드에서만 작동하도록 해야 한다
+
+**NetworkManager.cs**
 
 ```cs
 using DummyClient;

@@ -38,6 +38,5 @@ public class PacketHandler : MonoBehaviour {
 
         PlayerManager.Instance.Move(pkt);
     }
-
 }
 ```
