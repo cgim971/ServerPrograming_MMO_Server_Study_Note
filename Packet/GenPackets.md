@@ -1,3 +1,7 @@
+**GenPacket.cs**
+
+GenPacket은 Packet을 서버에 보내기 위한 형태로 맞추기 위해 Write 서버에서 받아왔을 때 형태가 다르기 때문에 읽기 위해 Read 함수 존재한다.
+
 ```cs
 using System;
 using System.Collections.Generic;
@@ -106,6 +110,7 @@ public class C_LeaveGame : IPacket {
     }
 }
 
+// 밑의 코드도 위와 같은 행동 반복
 public class S_BroadcastLeaveGame : IPacket {
     public int playerId;
 
@@ -135,6 +140,7 @@ public class S_BroadcastLeaveGame : IPacket {
     }
 }
 
+// 밑의 코드도 위와 같은 행동 반복
 public class S_PlayerList : IPacket {
     public class Player {
         public bool isSelf;
@@ -207,6 +213,7 @@ public class S_PlayerList : IPacket {
     }
 }
 
+// 밑의 코드도 위와 같은 행동 반복
 public class C_Move : IPacket {
     public float posX;
     public float posY;
@@ -246,6 +253,7 @@ public class C_Move : IPacket {
     }
 }
 
+// 밑의 코드도 위와 같은 행동 반복
 public class S_BroadcastMove : IPacket {
     public int playerId;
     public float posX;

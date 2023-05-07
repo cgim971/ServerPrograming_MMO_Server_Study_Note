@@ -1,4 +1,6 @@
-Session.cs
+**Session.cs**
+
+Session은 서버와 클라이언트 사이 상호 작용하기 위해 생성하는 인스턴스이다.
 
 ```cs
 using System;
@@ -44,21 +46,33 @@ namespace ServerCore {
         public abstract void OnRecvPacket(ArraySegment<byte> buffer);
     }
 
+    // Session
     public abstract class Session {
+        // 세션에 연결된 소켓
         Socket _socket;
+        // 1이면 연결 끊김
         int _disconnected = 0;
 
+        // 수신 데이터 버퍼
         RecvBuffer _recvBuffer = new RecvBuffer(65535);
 
         object _lock = new object();
+        // 전송 대기열
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
+        // 전송중인 데이터 리스트
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+        // 비동기 소켓 전송 객체
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+        // 비동기 소켓 수신 객체
         SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
+        // 세션이 연결되었을 때 호출되는 함수
         public abstract void OnConnected(EndPoint endPoint);
+        // 데이터 수신 시 호출되는 함수
         public abstract int OnRecv(ArraySegment<byte> buffer);
+        // 데이터 전송 시 호출되는 함수
         public abstract void OnSend(int numOfBytes);
+        // 연결이 종료될 때 호출되는 함수
         public abstract void OnDisconnected(EndPoint endPoint);
 
         // _sendQueue, _pendingList 비우기
@@ -82,13 +96,16 @@ namespace ServerCore {
 
         // 데이터 보내기
         public void Send(List<ArraySegment<byte>> sendBuffList) {
+            // 보낼 데이터가 없으면 반환
             if (sendBuffList.Count == 0)
                 return;
 
             lock (_lock) {
+                // 보낼 데이터 덩이가 있다면 _sendQueue에 추가
                 foreach (ArraySegment<byte> sendBuff in sendBuffList)
                     _sendQueue.Enqueue(sendBuff);
 
+                // 전송중인 데이터가 없으면 전송
                 if (_pendingList.Count == 0)
                     RegisterSend();
             }
@@ -97,7 +114,10 @@ namespace ServerCore {
         // 데이터 보내기 
         public void Send(ArraySegment<byte> sendBuff) {
             lock (_lock) {
+                // 보낼 데이터가 잇따면 _sendQueue에 추가
                 _sendQueue.Enqueue(sendBuff);
+                
+                // 전송중인 데이터가 없으면 전송
                 if (_pendingList.Count == 0)
                     RegisterSend();
             }
@@ -105,9 +125,11 @@ namespace ServerCore {
 
         // 연결 끊기
         public void Disconnect() {
+            // _disconnected 변수의 값이 1이면 메서드를 더 이상 진행하지 않고 반환
             if (Interlocked.Exchange(ref _disconnected, 1) == 1)
                 return;
 
+            // 연결 종료 함수 호출
             OnDisconnected(_socket.RemoteEndPoint);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
@@ -187,6 +209,7 @@ namespace ServerCore {
                     OnRecvCompleted(null, _recvArgs);
             }
             catch (Exception e) {
+                // 오류 메세지 출력
                 Console.WriteLine($"RegisterRecv Failed {e}");
             }
         }
@@ -217,6 +240,7 @@ namespace ServerCore {
                     RegisterRecv();
                 }
                 catch (Exception e) {
+                    // 오류 메세지 출력
                     Console.WriteLine($"OnRecvCompleted Failed {e}");
                 }
             }

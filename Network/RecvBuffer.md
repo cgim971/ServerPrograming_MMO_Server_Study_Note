@@ -1,4 +1,7 @@
-RecvBuffer.cs
+**RecvBuffer.cs**
+
+RecvBuffer는 클라이언트에서 서버로 데이터를 수신할 때 사용하는 버퍼 클래스이다.
+데이터를 읽고 쓰는 위치를 기록하며, 읽을 수 있는 데이터의 크기와 사용 가능한 버퍼 공간 크기를 계산.
 
 ```cs
 using System;

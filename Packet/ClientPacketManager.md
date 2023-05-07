@@ -1,3 +1,7 @@
+**ClientPacketManager.cs**
+
+ClientPacketManager는 클래스를 패킷을 생성하고 처리하기 위해 필요한 함수와 핸들러를 관리하는 클래스
+
 ```cs
 using ServerCore;
 using System;
@@ -13,9 +17,12 @@ public class PacketManager {
         Register();
     }
 
+    // 패킷을 생성하기 위한 함수 딕셔너리
     Dictionary<ushort, Func<PacketSession, ArraySegment<byte>, IPacket>> _makeFunc = new Dictionary<ushort, Func<PacketSession, ArraySegment<byte>, IPacket>>();
+    // 패키슬 처리하기 위해 필요한 핸들러 딕셔너리
     Dictionary<ushort, Action<PacketSession, IPacket>> _handler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
 
+    // 이벤트함수, 핸들러를 등록한다.
     public void Register() {
         _makeFunc.Add((ushort)PacketID.S_BroadcastEnterGame, MakePacket<S_BroadcastEnterGame>);
         _handler.Add((ushort)PacketID.S_BroadcastEnterGame, PacketHandler.S_BroadcastEnterGameHandler);

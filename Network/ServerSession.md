@@ -1,4 +1,6 @@
-ServerSession.cs
+**ServerSession.cs**
+
+ServerSession은 서버 세션 클래스
 
 ```cs
 using System;

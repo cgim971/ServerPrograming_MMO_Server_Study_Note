@@ -1,5 +1,6 @@
-PlayerManager.cs
+**PlayerManager.cs**
 
+PlayerManager는 GameRoom의 플레이어들을 관리하는 코드이다.
 
 ```cs
 using System.Collections;

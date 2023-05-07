@@ -1,4 +1,6 @@
-Connector.cs
+**Connector.cs**
+
+Connector는 서버와 클라이언트를 연결하기 위한 기능을 제공하는 클래스 
 
 ```cs
 using System;

@@ -1,4 +1,7 @@
-PacketQueue.cs
+**PacketQueue.cs**
+
+PacketQueue는 게임을 하면서 받아지는 Packet들을 순차적으로 받는다.
+이것을 선입선출 형태의 Queue를 이용하여 받아진 순서대로 처리한다.
 
 ```cs
 using System.Collections;

@@ -1,4 +1,6 @@
-SendBuffer.cs
+**SendBuffer.cs**
+
+SendBuffer는 서버에서 클라이언트로 데이터를 보낼 때 사용하는 버퍼 클래스이다.
 
 ```cs
 using System;
@@ -8,6 +10,7 @@ using System.Threading;
 
 namespace ServerCore {
     // SendBuffer를 도우는 SendBufferHelper 생성 
+    // 효율적으로 관리하기 위해
     public class SendBufferHelper {
         // 쓰레드 내부에서만 전역 사용하기 위해 'ThreadLocal'을 통해 구현
         public static ThreadLocal<SendBuffer> CurrentBuffer = new ThreadLocal<SendBuffer>(() => { return null; });

@@ -1,4 +1,6 @@
-Player.cs
+**Player.cs**
+
+Player는 플레이어 고유 아이디를 저장하여 플레이어끼리 구분하기 위해 사용
 
 ```cs
 using System.Collections;

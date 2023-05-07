@@ -1,4 +1,6 @@
-MyPlayer.cs
+**MyPlayer.cs**
+
+MyPlayer는 Player를 상속 받아서 기본적으로 모든 플레이어가 고유 아이디를 가질 수 있게 작성
 
 ```cs
 using System.Collections;
@@ -9,12 +11,9 @@ public class MyPlayer : Player {
     private NetworkManager _networkManager;
 
     private void Start() {
+        _networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
         // 코루틴으로 0.25f마다 데이터를 보낸다.
         StartCoroutine("CoSendPacket");
-        _networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-
-        Camera mainCam = Camera.main;
-        mainCam.transform.SetParent(transform);
     }
 
     IEnumerator CoSendPacket() {
